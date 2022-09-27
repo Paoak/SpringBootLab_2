@@ -39,23 +39,11 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookDto updateBook(BookDto bookDto) {
         BookDto existBook = getBookById(bookDto.getId());
-
-        if (bookDto.getTitle() != null) {
-            existBook.setTitle(bookDto.getTitle());
-        }
-
-        if (bookDto.getAuthor() != null) {
-            existBook.setAuthor(bookDto.getAuthor());
-        }
-
-        if (bookDto.getPageCount() != 0) {
-            existBook.setPageCount(bookDto.getPageCount());
-        }
-
-        if (BookValidator.isValidBook(existBook)) {
-            existBook = bookMapper.bookToBookDto(bookRepository.save(bookMapper.bookDtoToBook(existBook)));
+        existBook.setTitle(bookDto.getTitle());
+        existBook.setAuthor(bookDto.getAuthor());
+        existBook.setPageCount(bookDto.getPageCount());
+        existBook = bookMapper.bookToBookDto(bookRepository.save(bookMapper.bookDtoToBook(existBook)));
             log.info("Update book: {}", existBook);
-        }
         return existBook;
     }
 

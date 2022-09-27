@@ -56,8 +56,9 @@ public class BookServiceImplTemplate implements BookService {
 
         if (bookDto.getId() == null) {
             throw new NotValidException("ID must be not null");
-        }
-        if (getBookById(bookDto.getId()) != null) {
+        } else if( getBookById(bookDto.getId()) == null ){
+            throw new NotFoundException("Book with ID = " + bookDto.getId() + " not found");
+        } else {
             jdbcTemplate.update(UPDATE_SQL,
                     bookDto.getTitle(),
                     bookDto.getAuthor(),
@@ -66,8 +67,6 @@ public class BookServiceImplTemplate implements BookService {
                     bookDto.getId());
             log.info("Book with ID = {} update", bookDto.getId());
             return bookDto;
-        } else {
-            throw new NotFoundException("Book with ID = " + bookDto.getId() + " not found");
         }
     }
 

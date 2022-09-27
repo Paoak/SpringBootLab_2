@@ -50,8 +50,9 @@ public class UserServiceImplTemplate implements UserService {
 
         if (userDto.getId() == null) {
             throw new NotValidException("ID must be not null");
-        }
-        if (getUserById(userDto.getId()) != null) {
+        } else if(getUserById(userDto.getId()) == null){
+            throw new NotFoundException("User with ID = " + userDto.getId() + " not found");
+        }else{
             jdbcTemplate.update(UPDATE_SQL,
                     userDto.getFullName(),
                     userDto.getTitle(),
@@ -59,8 +60,6 @@ public class UserServiceImplTemplate implements UserService {
                     userDto.getId());
             log.info("User with ID = {} update", userDto.getId());
             return userDto;
-        } else {
-            throw new NotFoundException("User with ID = " + userDto.getId() + " not found");
         }
     }
 
